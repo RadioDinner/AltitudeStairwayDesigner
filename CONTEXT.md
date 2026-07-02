@@ -70,7 +70,8 @@ user input. The riser count is derived from it. _Avoid_: total height, elevation
 
 **Rise**:
 The vertical height of a single step (one riser). IRC-capped (7¾″ max by default).
-_Avoid_: unit rise, step height
+Always **derived** (Total Rise ÷ Riser Count) and shown read-only — never typed
+directly; the user changes it by adjusting Riser Count. _Avoid_: unit rise, step height
 
 **Run**:
 The horizontal depth of a single step, measured nose-to-nose — NOT the physical
@@ -79,8 +80,10 @@ which is the board's actual dimension including nosing overhang.
 _Avoid_: going, tread depth (they are different)
 
 **Riser Count**:
-The number of risers in the flight, derived from Total Rise ÷ a code-legal Rise.
-Drives the "number of steps." _Avoid_: step count (ambiguous)
+The number of risers in the flight. Initially derived as round(Total Rise ÷ max
+Rise), then user-adjustable via a ±1 stepper — the primary step-geometry control,
+since Rise is derived from it. Drives the "number of steps."
+_Avoid_: step count (ambiguous)
 
 **Flight**:
 A continuous series of steps between two levels. For a v1 straight run, the

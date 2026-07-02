@@ -114,7 +114,9 @@ Everything is **scoped by `company`** from day one ([ADR 0006](./adr/0006-multi-
 
 Given **Total Rise**, run length, width, **Ceiling Height**, and (optional)
 **Stairwell Opening Length**:
-1. Derive **Riser Count** = Total Rise ÷ a legal **Rise** (≤ 7¾″ default).
+1. Derive **Riser Count** = round(Total Rise ÷ 7¾″), then **Rise** = Total Rise ÷
+   Riser Count (uniform by construction). Rise is read-only; the user adjusts Riser
+   Count via a ±1 stepper ([ADR 0016](./adr/0016-derived-rise-adjust-riser-count.md)).
 2. Derive **Run** (≥ 10″), tread count = risers − 1, total run length; flag if it
    exceeds available run length.
 3. Auto-derive **baluster** count/spacing from the IRC 4″-sphere rule.
