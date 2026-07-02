@@ -28,9 +28,11 @@ and dimensional choice. What the editor edits and what a purchase order is
 generated from. _Avoid_: project, build, model (3D "model" is the rendering)
 
 **Share Link**:
-The no-login URL (an unguessable UUID) minted when a purchase order is generated,
-which persists a Design and reopens it for viewing or resuming. The link itself is
-the only access control — anyone holding it can view the Design.
+The no-login URL (an unguessable UUID) minted when the Configurator opens, which
+persists a Design and reopens it for viewing or resuming. The Design autosaves as a
+draft from the first edit, so the link resumes in-progress work — not just completed
+orders ([ADR 0020](docs/adr/0020-draft-autosave-share-link-from-start.md)). The link
+itself is the only access control — anyone holding it can view the Design.
 _Avoid_: permalink, save link
 
 **Configurator**:

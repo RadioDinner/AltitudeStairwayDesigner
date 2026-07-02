@@ -39,7 +39,8 @@ is not a v1 goal.
 - IRC-compliant generation with advisory overrides, one national ruleset
   ([ADR 0003](./adr/0003-irc-enforcement-with-advisory-overrides.md))
 - Intake → live editor with side-panel controls + real-time 3D preview
-- Persist Design on PO submit + no-login Share Link
+- Draft autosave from first edit + no-login Share Link minted when the Configurator
+  opens; PO is a frozen snapshot at submit ([ADR 0020](./adr/0020-draft-autosave-share-link-from-start.md))
 - PO = price-free PDF, emailed to one configured seller address
 
 **Out (deferred):**
