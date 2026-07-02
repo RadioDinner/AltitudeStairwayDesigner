@@ -23,3 +23,9 @@ bindings (physical min/max) — present from v1, read by nothing yet, the seam a
 future clamp/enforcement pass consumes. Same pattern as
 [Match Key](0013-defer-compatibility-engine-curate-compatible-catalog.md): record
 the constraint now, enforce later, no rework.
+
+These part maxes are **per-shop, not global**. One Company's largest tread might
+be 12″ deep × 72″ wide × 1.5″ thick; another shop's is larger or smaller. So the
+hard-limit field is **catalog data scoped by Company** ([ADR 0006](0006-multi-tenant-white-label-end-state-single-tenant-v1.md)),
+not a constant in the engine — the reserved seam inherits that scoping for free,
+and no code assumes a universal limit.
