@@ -131,7 +131,9 @@ Given **Total Rise**, run length, width, **Ceiling Height**, and (optional)
    **Fit warning** (advisory, no clamp) if it exceeds available run length. Real
    technical hard limits are a reserved, unenforced seam
    ([ADR 0019](./adr/0019-advisory-fit-warnings-reserve-hard-limits.md)).
-3. Auto-derive **baluster** count/spacing from the IRC 4″-sphere rule.
+3. Auto-derive **baluster** count/spacing: **per-tread** placement, **2** per tread
+   by default, bumped to **3** only when the **raking** 4″-sphere opening fails;
+   derived, never a user knob ([ADR 0023](./adr/0023-per-tread-derived-baluster-count.md)).
 4. Compute **handrail** and **shoe rail** length, **fillet** quantity, **newel**
    positions (2), **cap** count (2).
 5. Re-run checks live on every edit; surface **Advisory Overrides** as warnings,
