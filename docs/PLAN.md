@@ -71,11 +71,14 @@ Everything is **scoped by `company`** from day one ([ADR 0006](./adr/0006-multi-
 
 **Relational tables**
 
-- `company` — the tenant (one seeded test row in v1)
+- `company` — the tenant (one seeded test row in v1); carries a **default Primary
+  Species** used to seed a new Design ([ADR 0021](./adr/0021-curated-default-selection-seeds-first-design.md))
 - `product` — a configurable family of one part type (tread | riser | baluster |
   handrail | newel | shoe_rail | fillet | cap). Declares option axes + dimension
   bindings; **products-with-axes** model ([ADR 0009](./adr/0009-catalog-products-with-axes-resolving-to-skus.md)).
-  JSONB: `selection_axes`, `dimension_bindings`, `match_keys`, `rail_system`.
+  JSONB: `selection_axes`, `dimension_bindings`, `match_keys`, `rail_system`. Carries
+  a **default selection** (default SKU + default axis values) that seeds the first
+  Design ([ADR 0021](./adr/0021-curated-default-selection-seeds-first-design.md)).
 - `sku` — the orderable resolution of a product's axis values; references a
   geometry (`style` or procedural profile) + a `material`; fixed stock dimensions;
   **no price** ([ADR 0005](./adr/0005-no-pricing-in-v1-future-per-company-price-sheets.md)).
@@ -106,8 +109,10 @@ Everything is **scoped by `company`** from day one ([ADR 0006](./adr/0006-multi-
 
 ### Resolution flow (Design → PO)
 
-1. Configurator reads each product's `selection_axes` → renders side-panel controls;
-   Primary Species cascades as the default material.
+1. Intake (spatial inputs only) seeds a first Design from each product's **default
+   selection** + the company's **default Primary Species** ([ADR 0021](./adr/0021-curated-default-selection-seeds-first-design.md)).
+   The Configurator reads each product's `selection_axes` → renders side-panel
+   controls; Primary Species cascades as the default material, all overridable.
 2. Engine computes `dimension_bindings` from the stair geometry.
 3. Each (axis values + resolved dimensions) resolves to a concrete `sku` via the
    product→sku mapping; the `stocking_rule` yields quantity + cut list.
