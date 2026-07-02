@@ -143,7 +143,9 @@ optional run length, width (default 42″), and **Stairwell Opening Length**
 2. Derive **Run** (≥ 10″), tread count = risers − 1, total run length; raise a
    **Fit warning** (advisory, no clamp) if it exceeds available run length. Real
    technical hard limits are a reserved, unenforced seam
-   ([ADR 0019](./adr/0019-advisory-fit-warnings-reserve-hard-limits.md)).
+   ([ADR 0019](./adr/0019-advisory-fit-warnings-reserve-hard-limits.md)). Compute
+   **tread depth = Run + nosing** (nosing is a per-profile catalog value) — that is
+   the tread's cut dimension on the PO ([ADR 0031](./adr/0031-tread-nosing-is-a-catalog-invariant.md)).
 3. Auto-derive **baluster** count/spacing: **per-tread** placement, **2** per tread
    by default, bumped to **3** only when the **raking** 4″-sphere opening fails;
    derived, never a user knob ([ADR 0023](./adr/0023-per-tread-derived-baluster-count.md)).
@@ -164,7 +166,9 @@ All checks are advisory (flagged, never blocking): max Rise 7¾″; min Run 10�
 rise & run uniformity ≤ ⅜″ (checked against the **quantized cut dimensions**, not
 the exact floats — [ADR 0022](./adr/0022-units-exact-float-core-quantized-edges.md));
 min headroom 6′8″; min width 36″; handrail height
-34″–38″; baluster 4″-sphere spacing. Handrail graspability is out (a catalog Style
+34″–38″; baluster 4″-sphere spacing. IRC **nosing** (¾″–1¼″ when tread depth < 11″)
+is met **by catalog invariant** — every tread carries a front nosing — so no runtime
+nosing check exists ([ADR 0031](./adr/0031-tread-nosing-is-a-catalog-invariant.md)). Handrail graspability is out (a catalog Style
 property, not generated geometry). Headroom is measured at the stairwell opening's
 near edge: `headroom = ceiling_height − Total Rise + slope × opening_length`, which
 is why Intake collects **Ceiling Height** (required) and **Stairwell Opening

@@ -63,6 +63,13 @@ longer opening yields more headroom. _Avoid_: hole size, well opening
 The horizontal board a person steps on.
 _Avoid_: step (ambiguous — "step" means the tread+riser pair, not just the surface)
 
+**Nosing**:
+The front roundover of a tread that projects beyond the riser below. A fixed
+per-profile catalog value (never user-typed), it is the difference between **Run**
+and **tread depth**: tread depth = Run + nosing. Every v1 tread carries one, which
+satisfies the IRC nosing rule by construction ([ADR 0031](docs/adr/0031-tread-nosing-is-a-catalog-invariant.md)).
+_Avoid_: bullnose (that's one profile), overhang (ambiguous)
+
 **Riser**:
 The vertical face closing the gap between two treads. Always present in v1 (closed
 risers only); open risers are deferred ([ADR 0017](docs/adr/0017-closed-risers-only-v1.md)).
