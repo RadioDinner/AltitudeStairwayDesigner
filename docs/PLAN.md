@@ -108,7 +108,8 @@ Everything is **scoped by `company`** from day one ([ADR 0006](./adr/0006-multi-
 
 - `design` — space inputs (Total Rise, run length, width) + Primary Species +
   chosen axis values + resolved dimensions + advisory-override flags; addressed by
-  a Share-Link UUID.
+  a Share-Link UUID; carries a **`version`** for optimistic-concurrency guarding of a
+  shared draft ([ADR 0029](./adr/0029-optimistic-version-guard-on-draft-edits.md)).
 - `purchase_order` — frozen resolved SKU line-items (SKU, quantity, cut dims) +
   **required buyer contact** + **frozen active warnings**; emailed; price-free in v1
   (functions as an **RFQ** — [ADR 0025](./adr/0025-po-is-an-rfq-required-buyer-contact.md)).
@@ -132,9 +133,11 @@ Everything is **scoped by `company`** from day one ([ADR 0006](./adr/0006-multi-
 Given **Total Rise** and **Ceiling Height** (the only required Intake inputs) plus
 optional run length, width (default 42″), and **Stairwell Opening Length**
 ([ADR 0027](./adr/0027-minimal-required-intake-set.md)):
-1. Derive **Riser Count** = round(Total Rise ÷ 7¾″), then **Rise** = Total Rise ÷
-   Riser Count (uniform by construction in the exact-float core). Rise is read-only;
-   the user adjusts Riser Count via a ±1 stepper ([ADR 0016](./adr/0016-derived-rise-adjust-riser-count.md)).
+1. Derive **Riser Count** = **ceil**(Total Rise ÷ 7¾″) — `ceil`, so the seeded design
+   is never already over max rise; stepping down is a deliberate override — then
+   **Rise** = Total Rise ÷ Riser Count (uniform by construction in the exact-float
+   core). Rise is read-only; the user adjusts Riser Count via a ±1 stepper
+   ([ADR 0016](./adr/0016-derived-rise-adjust-riser-count.md)).
    Units: feet-inches-fractions input, exact-float core, dimensions quantized to
    1/16″ only at display and the PO cut list ([ADR 0022](./adr/0022-units-exact-float-core-quantized-edges.md)).
 2. Derive **Run** (≥ 10″), tread count = risers − 1, total run length; raise a
@@ -165,7 +168,10 @@ min headroom 6′8″; min width 36″; handrail height
 property, not generated geometry). Headroom is measured at the stairwell opening's
 near edge: `headroom = ceiling_height − Total Rise + slope × opening_length`, which
 is why Intake collects **Ceiling Height** (required) and **Stairwell Opening
-Length** (optional, defaulting to full projected run).
+Length** (optional, defaulting to full projected run). The formula assumes a **flush
+header** (obstruction level with the ceiling); it reads optimistic if a dropped
+header/soffit exists, so the warning copy says so and a header-drop input is a
+reserved future seam ([ADR 0030](./adr/0030-headroom-flush-header-assumption.md)).
 
 ## Top risks
 
