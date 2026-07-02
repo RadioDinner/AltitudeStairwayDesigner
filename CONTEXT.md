@@ -40,8 +40,20 @@ panel, not by dragging the 3D model. _Avoid_: builder, designer, tool
 
 **Intake**:
 The short initial step where the user enters space details (Total Rise, run
-length, width) that seed the first code-compliant Design before the Configurator
-opens. _Avoid_: wizard, setup, onboarding
+length, width, Ceiling Height, and optionally Stairwell Opening Length) that seed
+the first code-compliant Design before the Configurator opens.
+_Avoid_: wizard, setup, onboarding
+
+**Ceiling Height**:
+The finished floor-to-ceiling height of the lower level — a required Intake input.
+Combined with Total Rise and Stairwell Opening Length, it lets the engine check
+IRC headroom. Distinct from Total Rise (floor-to-floor). _Avoid_: room height
+
+**Stairwell Opening Length**:
+The horizontal length of the opening in the floor above, measured along the run —
+an optional Intake input that defaults to the stair's full projected run length.
+It positions the header (the opening's near edge) where headroom is tightest; a
+longer opening yields more headroom. _Avoid_: hole size, well opening
 
 **Tread**:
 The horizontal board a person steps on.

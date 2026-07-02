@@ -112,7 +112,8 @@ Everything is **scoped by `company`** from day one ([ADR 0006](./adr/0006-multi-
 
 ## The generation engine (the hard core)
 
-Given **Total Rise**, run length, and width:
+Given **Total Rise**, run length, width, **Ceiling Height**, and (optional)
+**Stairwell Opening Length**:
 1. Derive **Riser Count** = Total Rise ÷ a legal **Rise** (≤ 7¾″ default).
 2. Derive **Run** (≥ 10″), tread count = risers − 1, total run length; flag if it
    exceeds available run length.
@@ -121,6 +122,16 @@ Given **Total Rise**, run length, and width:
    positions (2), **cap** count (2).
 5. Re-run checks live on every edit; surface **Advisory Overrides** as warnings,
    never hard-blocks ([ADR 0003](./adr/0003-irc-enforcement-with-advisory-overrides.md)).
+
+### v1 IRC ruleset ([ADR 0015](./adr/0015-v1-irc-dimensional-ruleset.md))
+
+All checks are advisory (flagged, never blocking): max Rise 7¾″; min Run 10″;
+rise & run uniformity ≤ ⅜″; min headroom 6′8″; min width 36″; handrail height
+34″–38″; baluster 4″-sphere spacing. Handrail graspability is out (a catalog Style
+property, not generated geometry). Headroom is measured at the stairwell opening's
+near edge: `headroom = ceiling_height − Total Rise + slope × opening_length`, which
+is why Intake collects **Ceiling Height** (required) and **Stairwell Opening
+Length** (optional, defaulting to full projected run).
 
 ## Top risks
 
