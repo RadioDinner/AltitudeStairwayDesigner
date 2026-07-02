@@ -41,7 +41,8 @@ is not a v1 goal.
 - Intake → live editor with side-panel controls + real-time 3D preview
 - Draft autosave from first edit + no-login Share Link minted when the Configurator
   opens; PO is a frozen snapshot at submit ([ADR 0020](./adr/0020-draft-autosave-share-link-from-start.md))
-- PO = price-free PDF, emailed to one configured seller address
+- PO = price-free PDF (an **RFQ** in v1), emailed to one configured seller address +
+  required buyer contact; buyer gets a confirmation with their Share Link ([ADR 0025](./adr/0025-po-is-an-rfq-required-buyer-contact.md))
 
 **Out (deferred):**
 - L/U/winder/curved geometries; structural parts; other accessories
@@ -105,8 +106,10 @@ Everything is **scoped by `company`** from day one ([ADR 0006](./adr/0006-multi-
 - `design` — space inputs (Total Rise, run length, width) + Primary Species +
   chosen axis values + resolved dimensions + advisory-override flags; addressed by
   a Share-Link UUID.
-- `purchase_order` — frozen resolved SKU line-items (SKU, quantity, cut dims),
-  emailed; price-free in v1. Catalog edits never mutate a submitted PO.
+- `purchase_order` — frozen resolved SKU line-items (SKU, quantity, cut dims) +
+  **required buyer contact**; emailed; price-free in v1 (functions as an **RFQ** —
+  [ADR 0025](./adr/0025-po-is-an-rfq-required-buyer-contact.md)). Catalog edits never
+  mutate a submitted PO.
 
 ### Resolution flow (Design → PO)
 

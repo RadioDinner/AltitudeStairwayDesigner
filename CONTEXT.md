@@ -207,8 +207,12 @@ _Avoid_: pricing, rate card
 **Purchase Order** (PO):
 The document generated at the end of a design that lists the configured parts
 (SKUs, quantities, cut dimensions) and is delivered by email to a stair-parts
-seller. Carries no prices in v1.
-_Avoid_: order, quote, cart
+seller. Carries no prices in v1, so it functions as a **Request for Quote** — the
+buyer-facing act is "Request Quote," the seller replies with a price. Captures
+**required buyer contact** (a reply-to) at submit; the buyer also gets a confirmation
+carrying the Share Link ([ADR 0025](docs/adr/0025-po-is-an-rfq-required-buyer-contact.md)).
+`purchase_order` stays the internal name for the priced end state.
+_Avoid_: order, cart (RFQ is what it *does* in v1, PO is what it *is*)
 
 **Stair-Parts Seller**:
 The external vendor who receives a purchase order and fulfills the parts. In the
