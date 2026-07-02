@@ -12,6 +12,9 @@ Deferred to a later phase: all other accessories (rail fittings/brackets,
 nosing/cove trim, fasteners/adhesive, mounting hardware). These multiply SKUs and
 3D modeling effort for little value while proving the product.
 
+Note: caps-on-newels plus no rail fittings makes this a **post-to-post** part set —
+made explicit in [ADR 0028](0028-v1-is-post-to-post-rail-system-named-in-schema.md).
+
 Baluster count and spacing are auto-derived from the IRC 4″-sphere rule and shown
 to the user; the user may override spacing as an advisory action (ADR 0003), but
 the default is computed — it is not a raw user input.

@@ -98,8 +98,11 @@ Everything is **scoped by `company`** from day one ([ADR 0006](./adr/0006-multi-
   plus a **stocking rule** (`fixed` | `stock_lengths` | `cut_to_size`)
   ([ADR 0010](./adr/0010-selection-axes-vs-dimension-bindings.md)).
 - `anchor_scale_spec` — base/top anchors, scalable axis, fixed-detail zones.
-- `match_keys` / `rail_system` — reserved compatibility fields, unenforced in v1
+- `match_keys` — reserved compatibility field, unenforced in v1
   ([ADR 0013](./adr/0013-defer-compatibility-engine-curate-compatible-catalog.md)).
+- `rail_system` — a real value (`post_to_post`) on every SKU from day one; v1 is
+  post-to-post, OTP addable later as a second value without migration
+  ([ADR 0028](./adr/0028-v1-is-post-to-post-rail-system-named-in-schema.md)).
 
 **Snapshot rows**
 

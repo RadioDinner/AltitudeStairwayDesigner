@@ -177,7 +177,9 @@ _Avoid_: size option, measurement
 **Rail System**:
 The coarse compatibility family a set of parts belongs to (e.g. post-to-post vs.
 over-the-post), which governs how rails, fittings, newels, and balusters combine.
-v1 ships a single Rail System so every part is mutually compatible.
+v1 ships a single Rail System — **post-to-post** (straight rail dying into cap-topped
+newels, no curved fittings) — so every part is mutually compatible; `rail_system`
+carries a real value in the schema from day one ([ADR 0028](docs/adr/0028-v1-is-post-to-post-rail-system-named-in-schema.md)).
 _Avoid_: railing type, kit
 
 **Match Key**:
