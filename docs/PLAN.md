@@ -123,8 +123,10 @@ Everything is **scoped by `company`** from day one ([ADR 0006](./adr/0006-multi-
 Given **Total Rise**, run length, width, **Ceiling Height**, and (optional)
 **Stairwell Opening Length**:
 1. Derive **Riser Count** = round(Total Rise ÷ 7¾″), then **Rise** = Total Rise ÷
-   Riser Count (uniform by construction). Rise is read-only; the user adjusts Riser
-   Count via a ±1 stepper ([ADR 0016](./adr/0016-derived-rise-adjust-riser-count.md)).
+   Riser Count (uniform by construction in the exact-float core). Rise is read-only;
+   the user adjusts Riser Count via a ±1 stepper ([ADR 0016](./adr/0016-derived-rise-adjust-riser-count.md)).
+   Units: feet-inches-fractions input, exact-float core, dimensions quantized to
+   1/16″ only at display and the PO cut list ([ADR 0022](./adr/0022-units-exact-float-core-quantized-edges.md)).
 2. Derive **Run** (≥ 10″), tread count = risers − 1, total run length; raise a
    **Fit warning** (advisory, no clamp) if it exceeds available run length. Real
    technical hard limits are a reserved, unenforced seam
@@ -138,7 +140,9 @@ Given **Total Rise**, run length, width, **Ceiling Height**, and (optional)
 ### v1 IRC ruleset ([ADR 0015](./adr/0015-v1-irc-dimensional-ruleset.md))
 
 All checks are advisory (flagged, never blocking): max Rise 7¾″; min Run 10″;
-rise & run uniformity ≤ ⅜″; min headroom 6′8″; min width 36″; handrail height
+rise & run uniformity ≤ ⅜″ (checked against the **quantized cut dimensions**, not
+the exact floats — [ADR 0022](./adr/0022-units-exact-float-core-quantized-edges.md));
+min headroom 6′8″; min width 36″; handrail height
 34″–38″; baluster 4″-sphere spacing. Handrail graspability is out (a catalog Style
 property, not generated geometry). Headroom is measured at the stairwell opening's
 near edge: `headroom = ceiling_height − Total Rise + slope × opening_length`, which
