@@ -94,6 +94,12 @@ A user choice that falls outside IRC (e.g. a rise above the legal max). Permitte
 but flagged with a visible warning — never silently accepted or hard-blocked.
 _Avoid_: exception, violation
 
+**Guard**:
+The protective barrier along the open side of the flight — the handrail, balusters,
+shoe rail, fillets, and newels together. Present only on an open side; a wall side
+has no guard. v1 has exactly one open side, so exactly one guard
+([ADR 0018](docs/adr/0018-single-open-side-fixed-v1.md)). _Avoid_: railing, guardrail, banister
+
 **Baluster**:
 A vertical infill member running from tread/shoe to handrail, providing guard
 infill and style.

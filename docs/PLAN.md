@@ -30,6 +30,7 @@ is not a v1 goal.
 **In:**
 - Straight-run stairs only ([ADR 0001](./adr/0001-finish-parts-only-scope.md))
 - Closed risers only; open risers deferred ([ADR 0017](./adr/0017-closed-risers-only-v1.md))
+- Single open side with a full guard, one wall side; sidedness fixed ([ADR 0018](./adr/0018-single-open-side-fixed-v1.md))
 - Finish parts only; stringers/structure out entirely ([ADR 0001](./adr/0001-finish-parts-only-scope.md))
 - Part set: treads, risers, balusters, handrail, newel posts + fillets, shoe rails,
   caps ([ADR 0008](./adr/0008-v1-part-set.md))
