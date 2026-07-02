@@ -28,8 +28,21 @@ before submit** and updates live, rather than being written once at PO time.
   row. Cleanup / TTL for abandoned drafts is **deferred**; note it as a future
   housekeeping seam, not a v1 concern.
 
-## Open (grill next)
+## Lifecycle after PO — one Design ↔ one PO
 
-Whether a Design stays editable **after** a PO is generated — i.e. does reopening
-the Share Link post-submit resume an editable draft (and allow a second PO), or lock
-to a read-only view of what was ordered.
+A Design is editable **only until its PO is generated**. Generating the PO freezes
+the Design **read-only**; thereafter the Share Link reopens it as a receipt — the
+3D view and the ordered line-items, no editing. A Design produces **at most one
+PO**, and a PO belongs to exactly one Design.
+
+This keeps order semantics unambiguous (the seller never gets two emails for one
+evolving job) and matches the frozen-snapshot model
+([ADR 0014](0014-hybrid-postgres-storage-relational-core-jsonb-config.md)) — after
+submit, both the PO **and** the Design it came from are immutable.
+
+### Consequence / revisit trigger
+
+A user who wants to change an order after submitting starts a **new Design from
+Intake** — their prior configuration is not a starting point. If testing shows
+post-order iteration is common, revisit with a "duplicate to a new Design" fork
+(cloning the frozen Design into a fresh editable draft + link).
