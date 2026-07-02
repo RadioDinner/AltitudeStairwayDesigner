@@ -126,8 +126,9 @@ Everything is **scoped by `company`** from day one ([ADR 0006](./adr/0006-multi-
 
 ## The generation engine (the hard core)
 
-Given **Total Rise**, run length, width, **Ceiling Height**, and (optional)
-**Stairwell Opening Length**:
+Given **Total Rise** and **Ceiling Height** (the only required Intake inputs) plus
+optional run length, width (default 42″), and **Stairwell Opening Length**
+([ADR 0027](./adr/0027-minimal-required-intake-set.md)):
 1. Derive **Riser Count** = round(Total Rise ÷ 7¾″), then **Rise** = Total Rise ÷
    Riser Count (uniform by construction in the exact-float core). Rise is read-only;
    the user adjusts Riser Count via a ±1 stepper ([ADR 0016](./adr/0016-derived-rise-adjust-riser-count.md)).

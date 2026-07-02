@@ -41,9 +41,11 @@ controls (dropdowns for styles/species, sliders for dimensions). v1 edits via th
 panel, not by dragging the 3D model. _Avoid_: builder, designer, tool
 
 **Intake**:
-The short initial step where the user enters space details (Total Rise, run
-length, width, Ceiling Height, and optionally Stairwell Opening Length) that seed
-the first code-compliant Design before the Configurator opens.
+The short initial step where the user enters space details that seed the first
+code-compliant Design before the Configurator opens. Only **Total Rise** and
+**Ceiling Height** are required; run length (enables the Fit warning), width
+(defaults 42″), and Stairwell Opening Length (defaults to full run) are optional
+([ADR 0027](docs/adr/0027-minimal-required-intake-set.md)).
 _Avoid_: wizard, setup, onboarding
 
 **Ceiling Height**:
