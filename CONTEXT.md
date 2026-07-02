@@ -90,8 +90,11 @@ A continuous series of steps between two levels. For a v1 straight run, the
 flight is the entire staircase. _Avoid_: run (overloaded)
 
 **Advisory Override**:
-A user choice that falls outside IRC (e.g. a rise above the legal max). Permitted
-but flagged with a visible warning — never silently accepted or hard-blocked.
+A user choice or derived result that falls outside a limit. Permitted but flagged
+with a visible warning — never silently accepted or hard-blocked. Two kinds: a
+**Code warning** (an IRC rule is violated) and a **Fit warning** (the stair doesn't
+fit the physical space, e.g. total run > available run length). Real technical hard
+limits are deferred ([ADR 0019](docs/adr/0019-advisory-fit-warnings-reserve-hard-limits.md)).
 _Avoid_: exception, violation
 
 **Guard**:

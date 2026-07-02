@@ -119,8 +119,10 @@ Given **Total Rise**, run length, width, **Ceiling Height**, and (optional)
 1. Derive **Riser Count** = round(Total Rise ÷ 7¾″), then **Rise** = Total Rise ÷
    Riser Count (uniform by construction). Rise is read-only; the user adjusts Riser
    Count via a ±1 stepper ([ADR 0016](./adr/0016-derived-rise-adjust-riser-count.md)).
-2. Derive **Run** (≥ 10″), tread count = risers − 1, total run length; flag if it
-   exceeds available run length.
+2. Derive **Run** (≥ 10″), tread count = risers − 1, total run length; raise a
+   **Fit warning** (advisory, no clamp) if it exceeds available run length. Real
+   technical hard limits are a reserved, unenforced seam
+   ([ADR 0019](./adr/0019-advisory-fit-warnings-reserve-hard-limits.md)).
 3. Auto-derive **baluster** count/spacing from the IRC 4″-sphere rule.
 4. Compute **handrail** and **shoe rail** length, **fillet** quantity, **newel**
    positions (2), **cap** count (2).
