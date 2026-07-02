@@ -60,8 +60,8 @@ The horizontal board a person steps on.
 _Avoid_: step (ambiguous — "step" means the tread+riser pair, not just the surface)
 
 **Riser**:
-The vertical face closing the gap between two treads. May be present (closed) or
-absent (open) — being pinned down.
+The vertical face closing the gap between two treads. Always present in v1 (closed
+risers only); open risers are deferred ([ADR 0017](docs/adr/0017-closed-risers-only-v1.md)).
 _Avoid_: kick, back
 
 **Total Rise**:
