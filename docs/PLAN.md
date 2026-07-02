@@ -107,9 +107,11 @@ Everything is **scoped by `company`** from day one ([ADR 0006](./adr/0006-multi-
   chosen axis values + resolved dimensions + advisory-override flags; addressed by
   a Share-Link UUID.
 - `purchase_order` — frozen resolved SKU line-items (SKU, quantity, cut dims) +
-  **required buyer contact**; emailed; price-free in v1 (functions as an **RFQ** —
-  [ADR 0025](./adr/0025-po-is-an-rfq-required-buyer-contact.md)). Catalog edits never
-  mutate a submitted PO.
+  **required buyer contact** + **frozen active warnings**; emailed; price-free in v1
+  (functions as an **RFQ** — [ADR 0025](./adr/0025-po-is-an-rfq-required-buyer-contact.md)).
+  Warnings print on both the seller RFQ and buyer confirmation
+  ([ADR 0026](./adr/0026-warnings-freeze-onto-po-with-acknowledgment-gate.md)). Catalog
+  edits never mutate a submitted PO.
 
 ### Resolution flow (Design → PO)
 
@@ -145,6 +147,9 @@ Given **Total Rise**, run length, width, **Ceiling Height**, and (optional)
    ([ADR 0024](./adr/0024-handrail-continuous-with-max-splice-is-product-property.md)).
 5. Re-run checks live on every edit; surface **Advisory Overrides** as warnings,
    never hard-blocks ([ADR 0003](./adr/0003-irc-enforcement-with-advisory-overrides.md)).
+   Active warnings freeze onto the PO snapshot and print on both emails; submit is
+   gated by a one-tap acknowledgment when any warning is active — a deliberate act,
+   still not a block ([ADR 0026](./adr/0026-warnings-freeze-onto-po-with-acknowledgment-gate.md)).
 
 ### v1 IRC ruleset ([ADR 0015](./adr/0015-v1-irc-dimensional-ruleset.md))
 
