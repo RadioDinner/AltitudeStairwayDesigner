@@ -76,9 +76,10 @@ Everything is **scoped by `company`** from day one ([ADR 0006](./adr/0006-multi-
 - `product` — a configurable family of one part type (tread | riser | baluster |
   handrail | newel | shoe_rail | fillet | cap). Declares option axes + dimension
   bindings; **products-with-axes** model ([ADR 0009](./adr/0009-catalog-products-with-axes-resolving-to-skus.md)).
-  JSONB: `selection_axes`, `dimension_bindings`, `match_keys`, `rail_system`. Carries
-  a **default selection** (default SKU + default axis values) that seeds the first
-  Design ([ADR 0021](./adr/0021-curated-default-selection-seeds-first-design.md)).
+  JSONB: `selection_axes`, `dimension_bindings`, `match_keys`, `rail_system`,
+  `splice_policy` (`continuous` | `spliceable` — [ADR 0024](./adr/0024-handrail-continuous-with-max-splice-is-product-property.md)).
+  Carries a **default selection** (default SKU + default axis values) that seeds the
+  first Design ([ADR 0021](./adr/0021-curated-default-selection-seeds-first-design.md)).
 - `sku` — the orderable resolution of a product's axis values; references a
   geometry (`style` or procedural profile) + a `material`; fixed stock dimensions;
   **no price** ([ADR 0005](./adr/0005-no-pricing-in-v1-future-per-company-price-sheets.md)).
@@ -135,7 +136,10 @@ Given **Total Rise**, run length, width, **Ceiling Height**, and (optional)
    by default, bumped to **3** only when the **raking** 4″-sphere opening fails;
    derived, never a user knob ([ADR 0023](./adr/0023-per-tread-derived-baluster-count.md)).
 4. Compute **handrail** and **shoe rail** length, **fillet** quantity, **newel**
-   positions (2), **cap** count (2).
+   positions (2), **cap** count (2). The **handrail** is a single continuous piece —
+   exceeding the longest stock length raises an advisory Fit warning; **spliceable**
+   parts (shoe rail) resolve to a stick count. Splice policy is per-Product
+   ([ADR 0024](./adr/0024-handrail-continuous-with-max-splice-is-product-property.md)).
 5. Re-run checks live on every edit; surface **Advisory Overrides** as warnings,
    never hard-blocks ([ADR 0003](./adr/0003-irc-enforcement-with-advisory-overrides.md)).
 
