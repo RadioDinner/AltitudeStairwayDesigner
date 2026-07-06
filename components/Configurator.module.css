@@ -1,0 +1,62 @@
+.intake {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(140% 120% at 85% -10%, var(--timber-tint), transparent 45%),
+    var(--bench);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-5) var(--sp-6);
+}
+
+.mark {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background: var(--timber-strong);
+  box-shadow: inset 0 0 0 3px oklch(1 0 0 / 0.55);
+}
+
+.wordmark {
+  font-size: var(--text-base);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.stage {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: var(--sp-6);
+  padding-bottom: 12vh;
+}
+
+.result {
+  animation: fade var(--dur) var(--ease-out) both;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 34rem) {
+  .brand {
+    padding: var(--sp-4);
+  }
+  .stage {
+    padding: var(--sp-4);
+    padding-bottom: 8vh;
+    align-items: start;
+  }
+}

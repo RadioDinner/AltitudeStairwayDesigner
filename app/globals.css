@@ -1,0 +1,155 @@
+/*
+ * The Joiner's Bench — design tokens (DESIGN.md).
+ * Restrained: a clean near-white bench, one warm timber accent used sparingly,
+ * numbers set like instrument readings. Saturated color lives in the 3D stair.
+ */
+:root {
+  /* ── neutrals: the bench ── */
+  --bench: oklch(0.99 0.004 74); /* app + panel background */
+  --bench-raised: oklch(1 0 0); /* raised surface (focused field, popover) */
+  --bench-sunken: oklch(0.972 0.005 74); /* subtle inset / readout wells */
+  --hairline: oklch(0.9 0.005 74); /* default 1px separators */
+  --hairline-strong: oklch(0.82 0.006 74); /* input borders */
+
+  /* ── ink: text, ≥4.5:1 verified against --bench ── */
+  --ink: oklch(0.25 0.012 264); /* body + figures (~13:1) */
+  --ink-muted: oklch(0.47 0.012 264); /* labels, units, helper (~5.2:1) */
+  --ink-faint: oklch(0.6 0.01 264); /* decorative only, never body text */
+
+  /* ── timber accent: act / selected / focused, ≤10% of any screen ── */
+  --timber: oklch(0.56 0.11 47); /* accent line, small icon, focus ring */
+  --timber-strong: oklch(0.47 0.115 46); /* solid action bg (white text ≥4.5:1) */
+  --timber-strong-hover: oklch(0.43 0.12 45);
+  --timber-strong-active: oklch(0.39 0.12 44);
+  --timber-tint: oklch(0.955 0.024 60); /* faint selected/hover wash */
+  --timber-ring: oklch(0.56 0.11 47 / 0.35);
+
+  /* ── viewport: the deeper ground behind the 3D stair, so timber pops ── */
+  --viewport-top: oklch(0.31 0.014 252);
+  --viewport-bottom: oklch(0.23 0.016 258);
+
+  /* ── advisory states: attention, not alarm; always paired with icon + text ── */
+  --code-warn: oklch(0.72 0.13 70); /* Code (IRC) — gold-amber */
+  --code-warn-ink: oklch(0.44 0.1 62);
+  --code-warn-tint: oklch(0.965 0.035 78);
+  --fit-warn: oklch(0.62 0.09 246); /* Fit (space) — dusty slate-blue */
+  --fit-warn-ink: oklch(0.44 0.08 252);
+  --fit-warn-tint: oklch(0.96 0.022 246);
+
+  /* ── type ── */
+  --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.9375rem;
+  --text-lg: 1.0625rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.375rem;
+
+  /* ── space (4px base), radius, motion ── */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-8: 3rem;
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1); /* ease-out-quint */
+  --dur: 190ms;
+  --shadow-pop: 0 1px 2px oklch(0.2 0.02 264 / 0.08), 0 8px 24px oklch(0.2 0.02 264 / 0.1);
+
+  /* semantic z-scale */
+  --z-sticky: 100;
+  --z-popover: 400;
+  --z-modal: 600;
+  --z-toast: 800;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bench);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "cv11", "ss01";
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+}
+
+/* every dimension is an instrument reading: tabular mono */
+.mono,
+[data-mono] {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "zero" 1;
+  letter-spacing: -0.01em;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+input {
+  font: inherit;
+  color: inherit;
+}
+
+/* one focus system across the surface */
+:focus-visible {
+  outline: 2px solid var(--timber);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+::selection {
+  background: var(--timber-tint);
+}
+
+/* Strong reduced-motion: usable and legible with motion suppressed (PRODUCT.md) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

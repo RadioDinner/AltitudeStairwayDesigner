@@ -1,13 +1,14 @@
 # Handoff — as of 2026-07-06
 
 Where the Altitude Stairway Designer stands, and what to pick up next. Everything
-below is committed to `main`. Planning is complete; **implementation has begun** —
-the first three build-path steps (Supabase schema + placeholder catalog +
-generation engine) are done.
+below is committed to `main`. Planning is complete; **implementation is well underway** —
+the foundation (Supabase schema + placeholder catalog + generation engine) is done,
+and the **Intake surface** (the two-number front door + a live procedural 3D render)
+is built as a running Next.js app.
 
 ## State of play
 
-**Planning is thorough; schema + catalog + engine are in place.** The repo holds strategy,
+**Planning is thorough; schema + catalog + engine + Intake UI are in place.** The repo holds strategy,
 visual direction, domain language, and a v1 plan backed by 32 ADRs. Stack is settled
 ([ADR 0007](adr/0007-tech-stack.md)): React + Next.js (TypeScript), three.js via
 react-three-fiber, Supabase, transactional email, deployed on Vercel.
@@ -38,9 +39,18 @@ react-three-fiber, Supabase, transactional email, deployed on Vercel.
   `configFromCatalog` pulls constants (nosing, max handrail stock, baluster section)
   from the catalog. **32 unit + integration tests pass** (`npm test`), including an
   end-to-end run against the seeded catalog.
+- **Next.js app** (`app/`, `components/`) — the Intake surface, built with `/impeccable`
+  to the "Joiner's Bench" system (DESIGN.md): OKLCH tokens + Geist Sans/Mono in
+  `app/globals.css`, a two-number front door (`IntakeForm`) with feet-inches parsing
+  (`lib/ui/feetInches.ts`, ADR 0022) and progressive disclosure for optional inputs,
+  and a result view with a **live procedural 3D render** (react-three-fiber,
+  `components/Scene3D` + `stairGeometry.ts`) + an instrument-readout panel with the
+  ±1 riser stepper (ADR 0016) + advisory Code/Fit warnings. Wired to `generate()`
+  against the static seed catalog (`components/catalog.ts`). Production build + 40
+  tests green; **not yet visually QA'd in a browser** (no screenshot tool in that
+  session) — eyeball `npm run dev` and tune camera/spacing.
 - Project scaffolding: `package.json`, `tsconfig.json`, `.env.example` (secret split
-  per ADR 0032), Supabase CLI config, vitest. **Not** the Next.js app shell yet —
-  deferred to the renderer/UI steps.
+  per ADR 0032), Supabase CLI config, vitest.
 
 **Not yet applied to a live Supabase project** — no project is linked. To apply:
 `supabase link` then `npm run db:push`, and `supabase db reset` loads `seed.sql`
@@ -98,15 +108,20 @@ Per the plan's own "Immediate next step," build the foundation before surfaces:
 3. ~~**Build the generation engine**~~ — **done**. `lib/engine/`, pure TS, 32 tests
    passing. `generate(view, intake)` → `{ stair, lineItems, warnings }`.
 
-Then, next in the build path:
+Then, in the build path:
 
-4. **3D renderer** — procedural boxy parts (tread/riser/handrail/shoe/fillet/cap) +
-   instanced GLTF ornamental parts (baluster/newel) from the engine's `ResolvedStair`.
-   Needs the `.glb` assets (still TODO from step 2) and the Next.js app shell.
-5. **Intake → live editor** (`/impeccable craft intake` — the two-number front door is
-   the smallest honest first surface), side-panel controls wired to `generate()`,
-   real-time preview, advisory warnings.
-6. **PO/RFQ pipeline** → iframe embed → user test.
+4. **3D renderer** — _first cut done_ (procedural boxy parts from `ResolvedStair`;
+   see `components/stairGeometry.ts`). Remaining: instanced **GLTF ornamental parts**
+   (baluster/newel) once the `.glb` assets exist (step 2 TODO), material swaps per
+   species, and an in-browser visual pass on lighting/camera/materials.
+5. **Intake → live editor** — _first cut done_ (the front door + result view + ±1
+   riser stepper). Remaining: the full **Configurator side panel** — per-part style /
+   species / profile controls (reads each product's `selection_axes`), Primary Species
+   cascade with per-part override (ADR 0011), thread selections through
+   `generate()`/`resolveLineItems`, and **draft autosave + Share Link** persistence to
+   a `design` row (ADR 0020/0029).
+6. **PO/RFQ pipeline** (freeze snapshot + warnings, buyer contact, two emails) →
+   iframe embed → user test.
 
 Wiring notes for whoever picks up #4–6:
 - The engine's `ResolvedStair`/`LineItem` shapes are what should firm up the

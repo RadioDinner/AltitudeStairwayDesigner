@@ -1,5 +1,13 @@
 node_modules/
 
+# Next.js
+.next/
+next-env.d.ts
+out/
+
+# TypeScript build info
+*.tsbuildinfo
+
 # Env / secrets (ADR 0032: service-role + email keys are server-only, never committed)
 .env
 .env.local
