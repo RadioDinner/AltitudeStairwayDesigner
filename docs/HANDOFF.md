@@ -1,14 +1,16 @@
 # Handoff — as of 2026-07-06
 
 Where the Altitude Stairway Designer stands, and what to pick up next. Everything
-below is committed to `main`. Planning is complete; **implementation is well underway** —
-the foundation (Supabase schema + placeholder catalog + generation engine) is done,
-and the **Intake surface** (the two-number front door + a live procedural 3D render)
-is built as a running Next.js app.
+below is committed and pushed to `main`. Planning is complete and **the app is live in
+production**: the foundation (Supabase schema + placeholder catalog + generation
+engine) is done, the **Intake surface** (two-number front door + live procedural 3D
+render) is built, and it is **deployed on Vercel with auto-deploy from `main`**.
+
+**Live URL:** https://altitude-stairway-designer.vercel.app
 
 ## State of play
 
-**Planning is thorough; schema + catalog + engine + Intake UI are in place.** The repo holds strategy,
+**Planning is thorough; schema + catalog + engine + Intake UI are built and deployed.** The repo holds strategy,
 visual direction, domain language, and a v1 plan backed by 32 ADRs. Stack is settled
 ([ADR 0007](adr/0007-tech-stack.md)): React + Next.js (TypeScript), three.js via
 react-three-fiber, Supabase, transactional email, deployed on Vercel.
@@ -47,8 +49,9 @@ react-three-fiber, Supabase, transactional email, deployed on Vercel.
   `components/Scene3D` + `stairGeometry.ts`) + an instrument-readout panel with the
   ±1 riser stepper (ADR 0016) + advisory Code/Fit warnings. Wired to `generate()`
   against the static seed catalog (`components/catalog.ts`). Production build + 40
-  tests green; **not yet visually QA'd in a browser** (no screenshot tool in that
-  session) — eyeball `npm run dev` and tune camera/spacing.
+  tests green; viewed and approved by the user in the local dev server — a formal
+  responsive / state / a11y QA pass (mobile + tablet, camera/material tuning) is still
+  worthwhile but not blocking.
 - Project scaffolding: `package.json`, `tsconfig.json`, `.env.example` (secret split
   per ADR 0032), Supabase CLI config, vitest.
 
@@ -60,6 +63,31 @@ static seed catalog (`components/catalog.ts`) client-side, so the DB isn't queri
 v1 yet. The catalog's `gltf_asset.storage_path`s point at `catalog/**` in Supabase
 storage — the actual `.glb` files still need authoring + upload (ADR 0004; a modeling
 task, tracked as an open thread).
+
+**Infrastructure & deployment** (ADR 0032):
+
+- **Vercel project** `ilandedits-projects/altitude-stairway-designer` (scope
+  `ilandedits-projects`, CLI user `ilandedit`), GitHub-connected to
+  `RadioDinner/AltitudeStairwayDesigner`. **Auto-deploy is live**: push `main` →
+  production, PRs → preview URLs. Live at
+  https://altitude-stairway-designer.vercel.app (raw per-deploy URLs sit behind
+  Vercel deployment protection — share the stable alias).
+- **Env vars** set (encrypted) for **production + preview**:
+  `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (public), and
+  `SUPABASE_SERVICE_ROLE_KEY` (server-only). Values come from the linked Supabase
+  project. `.vercel/` and `.env*` are gitignored — no secrets in the repo.
+- Caveat (ADR 0032): there is only one Supabase project, so **preview deploys share
+  prod data**. Fine while there's no real data; give previews a non-prod project
+  before the PO pipeline stores anything real.
+
+**Resuming in Claude Code** — quick reference:
+
+- Run locally: `npm run dev` → http://localhost:3000 · Tests: `npm test` (40) ·
+  Types: `npm run typecheck` · Prod build: `npm run build`.
+- Deploy: just `git push origin main` (auto-deploys). Supabase is already linked
+  (`supabase migration list` to check drift; `npm run db:push` for new migrations).
+- Regenerate the catalog seed after editing `supabase/seed/catalog.ts`:
+  `npm run seed:build` (never hand-edit `supabase/seed.sql`).
 
 Read these before doing anything (don't re-derive their decisions):
 
@@ -144,5 +172,7 @@ Wiring notes for whoever picks up #4–6:
 - Implementation details only: GLTF/anchor-scale authoring pipeline, PDF + email
   deliverability, exact warning/acknowledgment copy.
 - **Return nosing** on the open-side tread ends — parked as a profile detail (0031).
-- DESIGN.md exact OKLCH values + font families + Components section — resolve on the
-  first scan-mode `/impeccable document` run once there's code.
+- DESIGN.md is still marked SEED, but **real tokens now exist** in `app/globals.css`
+  (resolved OKLCH palette, Geist Sans/Mono, spacing/motion scales). Run
+  `/impeccable document` in scan mode to extract them into DESIGN.md + a live sidecar
+  and drop the SEED marker.
