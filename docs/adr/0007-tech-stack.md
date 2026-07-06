@@ -11,6 +11,8 @@
   start, for clean per-tenant isolation on host sites (ADR 0006).
 - **PO pipeline:** PDF generated server-side and sent via a transactional email
   service (e.g. Resend/SendGrid/SES) — no self-hosted mail server.
+- **Deploy:** Vercel, auto-deploying from git — `main` → production, PRs → preview
+  URLs (ADR 0032).
 
 Why: this is the conventional, well-supported path for browser 3D + white-label
 widgets, keeps everything in one TypeScript codebase, and Supabase covers

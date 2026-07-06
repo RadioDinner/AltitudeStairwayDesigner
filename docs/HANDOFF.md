@@ -7,9 +7,9 @@ pre-implementation project.
 ## State of play
 
 **Planning is thorough; implementation has not started.** The repo holds strategy,
-visual direction, domain language, and a v1 plan backed by 31 ADRs. Stack is settled
+visual direction, domain language, and a v1 plan backed by 32 ADRs. Stack is settled
 ([ADR 0007](adr/0007-tech-stack.md)): React + Next.js (TypeScript), three.js via
-react-three-fiber, Supabase, transactional email.
+react-three-fiber, Supabase, transactional email, deployed on Vercel.
 
 Read these before doing anything (don't re-derive their decisions):
 
@@ -42,6 +42,9 @@ Read these before doing anything (don't re-derive their decisions):
 - **0030** headroom assumes a **flush header** (documented, optimistic); header-drop
   input reserved
 - **0031** tread **nosing is a catalog invariant**; tread depth = Run + nosing
+- **0032** deploy on **Vercel, auto-deploying from git** (`main` → prod, PRs →
+  preview URLs); secrets split client/server, previews use non-prod Supabase data,
+  embed route needs explicit `frame-ancestors`/CSP headers
 
 Also: **0016** corrected (`round`→`ceil` seed) and **0008** made explicit (post-to-post).
 
