@@ -52,11 +52,14 @@ react-three-fiber, Supabase, transactional email, deployed on Vercel.
 - Project scaffolding: `package.json`, `tsconfig.json`, `.env.example` (secret split
   per ADR 0032), Supabase CLI config, vitest.
 
-**Not yet applied to a live Supabase project** — no project is linked. To apply:
-`supabase link` then `npm run db:push`, and `supabase db reset` loads `seed.sql`
-locally (needs Docker). The catalog's `gltf_asset.storage_path`s point at
-`catalog/**` in Supabase storage — the actual `.glb` files still need authoring +
-upload (ADR 0004; a modeling task, tracked as an open thread).
+**Live Supabase project** — linked to `AltitudeStairDesigner` (ref
+`ltgirvvewfywqbwqxvvs`, us-west-2); the init migration is **applied to the remote DB**
+(`supabase migration list` shows local == remote at `20260706120000`). The **remote
+is not seeded yet** — `seed.sql` runs on local `db reset`; the app currently reads the
+static seed catalog (`components/catalog.ts`) client-side, so the DB isn't queried in
+v1 yet. The catalog's `gltf_asset.storage_path`s point at `catalog/**` in Supabase
+storage — the actual `.glb` files still need authoring + upload (ADR 0004; a modeling
+task, tracked as an open thread).
 
 Read these before doing anything (don't re-derive their decisions):
 
