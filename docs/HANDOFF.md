@@ -2,11 +2,11 @@
 
 Where the Altitude Stairway Designer stands, and what to pick up next. Everything
 below is committed to `main`. Planning is complete; **implementation has begun** —
-the first build-path step (the Supabase schema) is done.
+the first two build-path steps (Supabase schema + placeholder catalog) are done.
 
 ## State of play
 
-**Planning is thorough; the schema is materialized.** The repo holds strategy,
+**Planning is thorough; schema + placeholder catalog are in place.** The repo holds strategy,
 visual direction, domain language, and a v1 plan backed by 32 ADRs. Stack is settled
 ([ADR 0007](adr/0007-tech-stack.md)): React + Next.js (TypeScript), three.js via
 react-three-fiber, Supabase, transactional email, deployed on Vercel.
@@ -22,12 +22,22 @@ react-three-fiber, Supabase, transactional email, deployed on Vercel.
 - `lib/catalog/` — zod validators for every JSONB shape (ADR 0014), plus enum
   mirrors. Firming shapes (`resolved`, `render`, `anchor_scale_spec`) are `looseObject`
   so they tolerate engine output not yet modeled.
+- `supabase/seed/catalog.ts` + `supabase/seed.sql` — the curated placeholder catalog:
+  one seeded Company, 5 materials (3 species incl. the default Red Oak, 2 metal
+  finishes), 5 GLTF assets, 5 ornamental styles, 8 products (the full part set), and
+  20 SKUs — a single `post_to_post` system, internally compatible by construction.
+  `catalog.ts` is the source of truth: it validates every JSONB payload against
+  `lib/catalog/` and cross-checks coherence at load; `npm run seed:build` regenerates
+  `seed.sql` (do not hand-edit it). Migration + seed applied cleanly against PG16.
 - Project scaffolding: `package.json`, `tsconfig.json`, `.env.example` (secret split
   per ADR 0032), Supabase CLI config. **Not** the Next.js app shell yet — deferred to
   the renderer/UI steps.
 
 **Not yet applied to a live Supabase project** — no project is linked. To apply:
-`supabase link` then `npm run db:push` (or `supabase start` locally with Docker).
+`supabase link` then `npm run db:push`, and `supabase db reset` loads `seed.sql`
+locally (needs Docker). The catalog's `gltf_asset.storage_path`s point at
+`catalog/**` in Supabase storage — the actual `.glb` files still need authoring +
+upload (ADR 0004; a modeling task, tracked as an open thread).
 
 Read these before doing anything (don't re-derive their decisions):
 
@@ -72,15 +82,18 @@ Per the plan's own "Immediate next step," build the foundation before surfaces:
 
 1. ~~**Materialize the schema in Supabase**~~ — **done** (see "Built so far" above).
    Tables + JSONB columns + zod validators are in place and verified.
-2. **Author a placeholder catalog** (next) — one seeded company (default species,
-   `rfq_recipient_email`), a curated post-to-post set, a handful of SKUs per part
-   type, 3–5 baluster + 2–3 newel GLTF assets. Land it as `supabase/seed.sql` +
-   asset uploads; validate each JSONB payload against `lib/catalog/` before insert.
-3. **Build the generation engine** (pure TS, unit-tested against IRC) — inputs →
-   resolved stair + SKU line-items + compliance flags, no UI. Honor the units model
+2. ~~**Author a placeholder catalog**~~ — **done**. `supabase/seed/catalog.ts` →
+   `seed.sql`, validated + coherence-checked, applied cleanly against PG16. Still
+   TODO within this step: author + upload the actual `.glb` assets the catalog's
+   `storage_path`s point at (a modeling task — see Open threads).
+3. **Build the generation engine** (next; pure TS, unit-tested against IRC) — inputs
+   → resolved stair + SKU line-items + compliance flags, no UI. Honor the units model
    (ADR 0022), ceil seed (0016), per-tread balusters (0023), tread depth = Run +
-   nosing (0031). It writes `design.resolved` / `purchase_order.line_items` — firm up
-   those `looseObject` validators as its output shape settles.
+   nosing (0031). It reads the catalog's `dimension_bindings` (geometry refs:
+   `stair_width`, `rise`, `tread_depth`, `flight_length`, `baluster_height`,
+   `newel_height`, `fillet_run`) and writes `design.resolved` /
+   `purchase_order.line_items` — firm up those `looseObject` validators as its output
+   shape settles.
 
 Then: 3D renderer → **Intake** editor (`/impeccable craft intake` — the two-number
 front door is the smallest honest first surface) → PO/RFQ pipeline → iframe embed →
