@@ -8,6 +8,8 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "seed:build": "node --import tsx supabase/seed/build.ts",
     "db:start": "supabase start",
     "db:reset": "supabase db reset",
@@ -23,6 +25,7 @@
     "@types/node": "^26.1.0",
     "supabase": "^2.109.0",
     "tsx": "^4.23.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.10"
   }
 }

@@ -2,11 +2,12 @@
 
 Where the Altitude Stairway Designer stands, and what to pick up next. Everything
 below is committed to `main`. Planning is complete; **implementation has begun** —
-the first two build-path steps (Supabase schema + placeholder catalog) are done.
+the first three build-path steps (Supabase schema + placeholder catalog +
+generation engine) are done.
 
 ## State of play
 
-**Planning is thorough; schema + placeholder catalog are in place.** The repo holds strategy,
+**Planning is thorough; schema + catalog + engine are in place.** The repo holds strategy,
 visual direction, domain language, and a v1 plan backed by 32 ADRs. Stack is settled
 ([ADR 0007](adr/0007-tech-stack.md)): React + Next.js (TypeScript), three.js via
 react-three-fiber, Supabase, transactional email, deployed on Vercel.
@@ -29,9 +30,17 @@ react-three-fiber, Supabase, transactional email, deployed on Vercel.
   `catalog.ts` is the source of truth: it validates every JSONB payload against
   `lib/catalog/` and cross-checks coherence at load; `npm run seed:build` regenerates
   `seed.sql` (do not hand-edit it). Migration + seed applied cleanly against PG16.
+- `lib/engine/` — the generation engine (pure TS, no UI/IO): `(Intake + CatalogView)
+  → resolved stair + SKU line-items + advisory warnings`. Honors the exact-float core
+  with 1/16″ quantized edges (0022), ceil riser seed (0016), tread depth = Run +
+  nosing (0031), per-tread balusters with the 2→3 bump (0023), and the advisory-only
+  IRC ruleset (0015/0003). `generate()` reads the catalog via `toCatalogView`; a thin
+  `configFromCatalog` pulls constants (nosing, max handrail stock, baluster section)
+  from the catalog. **32 unit + integration tests pass** (`npm test`), including an
+  end-to-end run against the seeded catalog.
 - Project scaffolding: `package.json`, `tsconfig.json`, `.env.example` (secret split
-  per ADR 0032), Supabase CLI config. **Not** the Next.js app shell yet — deferred to
-  the renderer/UI steps.
+  per ADR 0032), Supabase CLI config, vitest. **Not** the Next.js app shell yet —
+  deferred to the renderer/UI steps.
 
 **Not yet applied to a live Supabase project** — no project is linked. To apply:
 `supabase link` then `npm run db:push`, and `supabase db reset` loads `seed.sql`
@@ -86,18 +95,31 @@ Per the plan's own "Immediate next step," build the foundation before surfaces:
    `seed.sql`, validated + coherence-checked, applied cleanly against PG16. Still
    TODO within this step: author + upload the actual `.glb` assets the catalog's
    `storage_path`s point at (a modeling task — see Open threads).
-3. **Build the generation engine** (next; pure TS, unit-tested against IRC) — inputs
-   → resolved stair + SKU line-items + compliance flags, no UI. Honor the units model
-   (ADR 0022), ceil seed (0016), per-tread balusters (0023), tread depth = Run +
-   nosing (0031). It reads the catalog's `dimension_bindings` (geometry refs:
-   `stair_width`, `rise`, `tread_depth`, `flight_length`, `baluster_height`,
-   `newel_height`, `fillet_run`) and writes `design.resolved` /
-   `purchase_order.line_items` — firm up those `looseObject` validators as its output
-   shape settles.
+3. ~~**Build the generation engine**~~ — **done**. `lib/engine/`, pure TS, 32 tests
+   passing. `generate(view, intake)` → `{ stair, lineItems, warnings }`.
 
-Then: 3D renderer → **Intake** editor (`/impeccable craft intake` — the two-number
-front door is the smallest honest first surface) → PO/RFQ pipeline → iframe embed →
-user test.
+Then, next in the build path:
+
+4. **3D renderer** — procedural boxy parts (tread/riser/handrail/shoe/fillet/cap) +
+   instanced GLTF ornamental parts (baluster/newel) from the engine's `ResolvedStair`.
+   Needs the `.glb` assets (still TODO from step 2) and the Next.js app shell.
+5. **Intake → live editor** (`/impeccable craft intake` — the two-number front door is
+   the smallest honest first surface), side-panel controls wired to `generate()`,
+   real-time preview, advisory warnings.
+6. **PO/RFQ pipeline** → iframe embed → user test.
+
+Wiring notes for whoever picks up #4–6:
+- The engine's `ResolvedStair`/`LineItem` shapes are what should firm up the
+  `looseObject` validators (`design.resolved`, `purchase_order.line_items`) in
+  `lib/catalog/jsonb.ts`.
+- The editor persists a `design` row (autosave + version guard, ADR 0020/0029);
+  `generate()` recomputes on each edit. Selections currently default to each
+  product's default SKU (ADR 0021) — the editor adds per-part overrides, which
+  `resolveLineItems`/`generate` will need threaded through (today it resolves the
+  default SKU only; the seam is `CatalogView` + an optional selection map).
+- Run-length handling is deliberately per the plan: Run is a derived default
+  (`DEFAULTS.runInch = 11″`), and the available run is only a Fit check — revisit if
+  user testing wants the stair to fit a given footprint instead.
 
 ## Open threads (not blocking)
 
