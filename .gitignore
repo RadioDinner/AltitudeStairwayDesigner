@@ -1,0 +1,14 @@
+node_modules/
+
+# Env / secrets (ADR 0032: service-role + email keys are server-only, never committed)
+.env
+.env.local
+.env*.local
+
+# Supabase local dev
+supabase/.branches
+supabase/.temp
+
+# Misc
+.DS_Store
+*.log

@@ -1,15 +1,33 @@
-# Handoff — as of 2026-07-03
+# Handoff — as of 2026-07-06
 
 Where the Altitude Stairway Designer stands, and what to pick up next. Everything
-below is committed to `main`; there is no code yet — this is a fully-specced,
-pre-implementation project.
+below is committed to `main`. Planning is complete; **implementation has begun** —
+the first build-path step (the Supabase schema) is done.
 
 ## State of play
 
-**Planning is thorough; implementation has not started.** The repo holds strategy,
+**Planning is thorough; the schema is materialized.** The repo holds strategy,
 visual direction, domain language, and a v1 plan backed by 32 ADRs. Stack is settled
 ([ADR 0007](adr/0007-tech-stack.md)): React + Next.js (TypeScript), three.js via
 react-three-fiber, Supabase, transactional email, deployed on Vercel.
+
+**Built so far** — the v1 data model, materialized and verified:
+
+- `supabase/migrations/20260706120000_init_catalog_schema.sql` — all 8 tables
+  (company, material, gltf_asset, style, product, sku, design, purchase_order),
+  4 enums, the circular default FKs (company→species, product→sku), the
+  one-geometry-source CHECK on `sku`, and RLS enabled on every table (no anon
+  policies — access is via server routes with the service-role key). Applied cleanly
+  against PG16.
+- `lib/catalog/` — zod validators for every JSONB shape (ADR 0014), plus enum
+  mirrors. Firming shapes (`resolved`, `render`, `anchor_scale_spec`) are `looseObject`
+  so they tolerate engine output not yet modeled.
+- Project scaffolding: `package.json`, `tsconfig.json`, `.env.example` (secret split
+  per ADR 0032), Supabase CLI config. **Not** the Next.js app shell yet — deferred to
+  the renderer/UI steps.
+
+**Not yet applied to a live Supabase project** — no project is linked. To apply:
+`supabase link` then `npm run db:push` (or `supabase start` locally with Docker).
 
 Read these before doing anything (don't re-derive their decisions):
 
@@ -52,16 +70,17 @@ Also: **0016** corrected (`round`→`ceil` seed) and **0008** made explicit (pos
 
 Per the plan's own "Immediate next step," build the foundation before surfaces:
 
-1. **Materialize the schema in Supabase** — relational tables + JSONB columns, with
-   zod validators for the JSONB shapes (company w/ default species + version column;
-   product w/ default selection, splice_policy, rail_system; sku; style; material;
-   gltf_asset; design; purchase_order w/ buyer contact + frozen warnings).
-2. **Author a placeholder catalog** — one seeded company, a curated post-to-post set,
-   a handful of SKUs per part type, 3–5 baluster + 2–3 newel GLTF assets.
+1. ~~**Materialize the schema in Supabase**~~ — **done** (see "Built so far" above).
+   Tables + JSONB columns + zod validators are in place and verified.
+2. **Author a placeholder catalog** (next) — one seeded company (default species,
+   `rfq_recipient_email`), a curated post-to-post set, a handful of SKUs per part
+   type, 3–5 baluster + 2–3 newel GLTF assets. Land it as `supabase/seed.sql` +
+   asset uploads; validate each JSONB payload against `lib/catalog/` before insert.
 3. **Build the generation engine** (pure TS, unit-tested against IRC) — inputs →
    resolved stair + SKU line-items + compliance flags, no UI. Honor the units model
    (ADR 0022), ceil seed (0016), per-tread balusters (0023), tread depth = Run +
-   nosing (0031).
+   nosing (0031). It writes `design.resolved` / `purchase_order.line_items` — firm up
+   those `looseObject` validators as its output shape settles.
 
 Then: 3D renderer → **Intake** editor (`/impeccable craft intake` — the two-number
 front door is the smallest honest first surface) → PO/RFQ pipeline → iframe embed →
